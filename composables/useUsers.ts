@@ -17,11 +17,11 @@ export const useUsers = () => {
 
             return user;
         } catch (error) {
-            console.log(error);
+            throw new Error(error)
         }
     }
 
-    const getUserByPseudo = async (pseudo: string) => {
+    const getProfileByPseudo = async (pseudo: string) => {
         try {
             const response = await fetch(`${API_URL}/users/pseudo/${pseudo.substring(1)}`, {
                 method: 'GET',
@@ -29,17 +29,17 @@ export const useUsers = () => {
                     'Authorization': `Bearer ${authStore.accessToken}`
                 }
             })
-            const user = await response.json();
+            const profile = await response.json();
 
-            return user;
+            return profile;
         } catch (error) {
-            console.log(error);
+            throw new Error(error)
         }
     }
 
     return {
         getCurrentUser,
-        getUserByPseudo,
+        getProfileByPseudo
     }
 
 }

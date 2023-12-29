@@ -21,6 +21,22 @@ export const useThreads = () => {
         }
     }
 
+    const getThreadsByPseudo = async (pseudo: string) => {
+        try {
+            const response = await fetch(`${API_URL}/threads/pseudo/${pseudo.substring(1)}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authStore.accessToken}`
+                },
+            })
+            const threads = await response.json();
+
+            return threads;
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
     const getMyFollowingFeed = async (page: number = 1) => {
         try {
             const response = await fetch(`${API_URL}/threads/feed/following/${page}`, {
@@ -39,6 +55,7 @@ export const useThreads = () => {
 
     return {
         getMyThreads,
+        getThreadsByPseudo,
         getMyFollowingFeed
     }
 

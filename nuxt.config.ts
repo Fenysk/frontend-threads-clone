@@ -21,6 +21,6 @@ export default defineNuxtConfig({
     public: {
       API_URL: 'http://localhost:3621'
     }
-  }
+  },
 
 })

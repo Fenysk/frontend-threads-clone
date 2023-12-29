@@ -3,18 +3,26 @@ definePageMeta({
     middleware: "auth-middleware",
 });
 
-const { getUserByPseudo } = useUsers();
-const { getMyThreads } = useThreads();
+const { getProfileByPseudo } = useUsers();
+const { getThreadsByPseudo } = useThreads();
 
 const route = useRoute();
 const pseudo = route.params.pseudo;
 
-const user = await getUserByPseudo(pseudo);
-const threads = await getMyThreads();
+const profile = ref(null);
+const threads = ref(null);
+
+onBeforeMount(async () => {
+    profile.value = await getProfileByPseudo(pseudo);
+    threads.value = await getThreadsByPseudo(pseudo);
+});
 </script>
 
 <template>
-    <main class="container mx-auto">Hello {{ user.pseudo }}</main>
-    <pre>{{ user }}</pre>
+    <main class="container mx-auto">
+        <ProfileCard v-if="profile" :profile="profile" />
+    </main>
+
+    <pre>{{ profile }}</pre>
     <pre>{{ threads }}</pre>
 </template>
