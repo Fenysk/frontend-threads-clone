@@ -3,17 +3,19 @@ definePageMeta({
     layout: "login",
 });
 
-const openBox = (id) => {
+const openBox = (id: string) => {
     const box = document.getElementById(id);
     box.style.height = "auto";
-    box.style.padding = "1rem 1rem 0 1rem";
+    box.style.paddingTop = "1rem";
 };
 
-const email = ref("minefenysk@gmail.com");
-const password = ref("password");
+const email = ref<string>("minefenysk@gmail.com");
+const password = ref<string>("password");
 
-const login = () => {
-    alert(`Email: ${email.value}\nPassword: ${password.value}`);
+const { login } = useAuth();
+const handleLogin = async () => {
+    await login(email.value, password.value);
+    navigateTo("/");
 };
 </script>
 
@@ -35,9 +37,8 @@ const login = () => {
             >
                 <span class="font-semibold">Se connecter</span>
                 <span class="block mt-2 text-xs text-white/50">
-                    Connectez-vous ou créez un profil Threads avec votre compte
-                    Instagram. Cela vous permettra de publier du contenu et
-                    d’interagir sur Threads.</span
+                    Connectez-vous ou creez-vous un compte pour publier du contenu et
+                    interagir sur Threads.</span
                 >
                 <div id="login-box" class="h-0 overflow-hidden transition-all">
                     <form class="flex flex-col gap-4">
@@ -56,7 +57,7 @@ const login = () => {
                             class="w-full border-[1px] border-white/20 rounded-xl px-4 py-2 text-black"
                         />
                         <button
-                            @click.prevent="login"
+                            @click.prevent="handleLogin"
                             type="submit"
                             class="w-full bg-blue-600 text-white font-semibold rounded-xl px-4 py-2"
                         >
@@ -69,8 +70,8 @@ const login = () => {
             <div class="border-[1px] border-white/20 rounded-xl max-w-96 p-6">
                 <span class="font-semibold block">Utiliser sans profil</span>
                 <span class="block mt-2 text-xs text-white/50"
-                    >Vous pouvez naviguer dans Threads sans profil, mais vous ne
-                    pourrez pas interagir avec du contenu ni en publier.</span
+                    >Vous pouvez naviguer dans Threads sans profil, mais vous ne pourrez
+                    pas interagir avec du contenu ni en publier.</span
                 >
             </div>
         </section>

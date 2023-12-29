@@ -11,7 +11,16 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   modules: [
-    "@nuxtjs/tailwindcss"
-  ]
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+  ],
+
+  runtimeConfig: {
+    apiSecret: 'mon-secret',
+
+    public: {
+      API_URL: 'http://localhost:3621'
+    }
+  }
 
 })
