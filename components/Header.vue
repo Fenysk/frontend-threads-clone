@@ -49,7 +49,7 @@ const { currentUser } = storeToRefs(userStore);
                 </ul>
             </nav>
 
-            <div class="settings">
+            <div class="settings flex items-center">
                 <button @click="openModal('options')">
                     <IconsBurger class="text-[32px]" />
                 </button>
