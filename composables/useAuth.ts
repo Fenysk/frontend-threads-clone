@@ -8,6 +8,9 @@ export const useAuth = () => {
     const cookieRefreshToken = useCookie('refreshToken');
     const authStore = useAuthStore();
 
+    const { getCurrentUser } = useUsers();
+    const userStore = useUserStore();
+
     const storeTokens = (tokens: { accessToken: string, refreshToken: string }) => {
         const { accessToken, refreshToken } = tokens;
 
@@ -31,9 +34,13 @@ export const useAuth = () => {
             const tokens = await response.json();
             storeTokens(tokens);
 
+            const user = await getCurrentUser();
+            userStore.setUser(user);
+
             return true;
         } catch (error) {
-            alert(error);
+            const tokens = { accessToken: null, refreshToken: null }
+            storeTokens(tokens);
         }
     }
 
@@ -46,8 +53,10 @@ export const useAuth = () => {
                 },
             })
             const tokens = await response.json();
-
             storeTokens(tokens);
+
+            const user = await getCurrentUser();
+            userStore.setUser(user);
 
             return true;
         } catch (error) {
