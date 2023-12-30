@@ -9,6 +9,7 @@ const feed = await getMyFollowingFeed();
 </script>
 
 <template>
-    <main class="container mx-auto">Hello world</main>
-    <pre>{{ feed }}</pre>
+    <main>
+        <Feed :feed="feed" />
+    </main>
 </template>

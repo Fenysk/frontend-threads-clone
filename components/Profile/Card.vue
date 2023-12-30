@@ -10,7 +10,7 @@ const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
 
 const openModal = (modalName: string) => {
-    console.log(modalName);
+    alert(modalName);
 };
 </script>
 
@@ -30,6 +30,7 @@ const openModal = (modalName: string) => {
                     v-if="!!profile.avatarUrl"
                     :src="profile.avatarUrl"
                     :alt="profile.displayName"
+                    class="w-20 h-20 rounded-full"
                 />
                 <img v-else class="w-20 h-20 rounded-full bg-gray-300" />
             </div>
