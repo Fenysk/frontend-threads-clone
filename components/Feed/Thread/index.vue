@@ -82,39 +82,52 @@ const { transformDateToTimeAgo } = useUtils();
 const timeAgo = transformDateToTimeAgo(new Date(props.thread.createdAt));
 
 const openModal = (modalName: string) => {
-	alert(modalName);
+    alert(modalName);
 };
 </script>
 
 <template>
     <div
         id="Thread"
-        class="flex flex-row justify-between gap-3 w-full pt-3 border-t-[1px] border-white/10"
+        class="flex flex-row justify-between items-stretch gap-3 w-full pt-3 border-white/10"
+        :class="{
+            'border-t-[1px]': !thread.parentId,
+            'pb-3': thread.parentId,
+        }"
     >
-        <div id="Participants">
-            <div id="Author" class="pt-1">
+        <div id="Participants" class="flex flex-col items-center justify-between">
+            <div id="Author" class="pt-1 block">
                 <img
                     v-if="thread.User.Profile.avatarUrl"
                     :src="thread.User.Profile.avatarUrl"
                     alt="Author avatar"
-                    class="w-9 h-9 rounded-full"
+                    class="w-9 h-9 rounded-full object-cover"
                 />
                 <div v-else class="w-9 h-9 rounded-full bg-gray-700"></div>
             </div>
-            <!-- <FeedThreadLine /> -->
+            <FeedThreadLine v-if="thread.Children?.length > 0" />
         </div>
 
         <div id="Content" class="w-full flex flex-col">
-            <div id="Header" class="flex justify-between">
-                <span class="text-lg">{{ thread.User.Profile.pseudo }}</span>
-                <div class="flex flex-row flex-nowrap items-center">
-                    <span class="text-white/50 font-light text-sm block">{{ timeAgo }}</span>
-					<button @click="openModal('thread-options')" class="block p-2 rounded-full hover:bg-white/5 transition-all"><IconsSuspension class="text-white text-xl" /></button>
+            <div id="Header" class="flex justify-between relative">
+                <span>{{ thread.User.Profile.pseudo }}</span>
+                <div
+                    class="flex flex-row flex-nowrap items-center absolute right-0 top-0"
+                >
+                    <span class="text-white/50 font-light text-sm block">{{
+                        timeAgo
+                    }}</span>
+                    <button
+                        @click="openModal('thread-options')"
+                        class="block p-2 rounded-full hover:bg-white/5 transition-all"
+                    >
+                        <IconsSuspension class="text-white text-xl" />
+                    </button>
                 </div>
             </div>
             <span class="text-base font-light">{{ thread.content }}</span>
+            <FeedThreadActions :thread="thread" />
+            <FeedThreadLikes :likes="thread.Likes" v-if="thread.Likes?.length > 0" />
         </div>
     </div>
-
-    <pre class="overflow-auto">{{ thread }}</pre>
 </template>

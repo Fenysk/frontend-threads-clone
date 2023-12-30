@@ -9,6 +9,16 @@ const props = defineProps({
 
 <template>
     <section id="Feed">
-        <FeedThread v-for="thread in feed" :key="thread.id" :thread="thread" />
+        <div v-for="thread in feed" :key="thread.id">
+            <FeedThread :thread="thread" />
+            <FeedThread
+                v-if="
+                    thread.Children?.length > 0 &&
+                    thread.Children[thread.Children.length - 1].userId === thread.userId
+                "
+                :thread="thread.Children[thread.Children.length - 1]"
+            />
+            <!-- <Debug :data="thread" /> -->
+        </div>
     </section>
 </template>
