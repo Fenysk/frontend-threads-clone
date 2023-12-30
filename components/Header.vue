@@ -2,6 +2,9 @@
 import { storeToRefs } from "pinia";
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
+
+const router = useRouter();
+const currentRoute = computed(() => router.currentRoute.value);
 </script>
 
 <template>
@@ -19,7 +22,11 @@ const { currentUser } = storeToRefs(userStore);
                 <ul class="flex items-center gap-1">
                     <li class="relative cursor-pointer">
                         <NuxtLink to="/" class="block py-4 px-7">
-                            <IconsHouse class="text-[32px]" />
+                            <IconsHouseFill
+                                class="text-[32px] text-white"
+                                v-if="currentRoute.path === '/'"
+                            />
+                            <IconsHouse v-else class="text-[32px]" />
                         </NuxtLink>
                         <div
                             id="Animation"
@@ -28,7 +35,12 @@ const { currentUser } = storeToRefs(userStore);
                     </li>
                     <li class="relative cursor-pointer">
                         <NuxtLink to="/search" class="block py-4 px-7">
-                            <IconsSearch class="text-[32px]" />
+                            <IconsSearch
+                                class="text-[32px]"
+                                :class="
+                                    currentRoute.path === '/search' ? 'text-white' : ''
+                                "
+                            />
                         </NuxtLink>
                         <div
                             id="Animation"
@@ -49,7 +61,11 @@ const { currentUser } = storeToRefs(userStore);
                     </li>
                     <li class="relative cursor-pointer">
                         <NuxtLink to="/activity" class="block py-4 px-7">
-                            <IconsFavorite class="text-[32px]" />
+                            <IconsFavoriteFill
+                                class="text-[32px] text-white"
+                                v-if="currentRoute.path === '/activity'"
+                            />
+                            <IconsFavorite v-else class="text-[32px]" />
                         </NuxtLink>
                         <div
                             id="Animation"
@@ -61,7 +77,14 @@ const { currentUser } = storeToRefs(userStore);
                             :to="`/@${currentUser?.Profile?.pseudo}`"
                             class="block py-4 px-7"
                         >
-                            <IconsPerson class="text-[32px]" />
+                            <IconsPersonFill
+                                class="text-[32px] text-white"
+                                v-if="
+                                    currentRoute.path ===
+                                    `/@${currentUser?.Profile?.pseudo}`
+                                "
+                            />
+                            <IconsPerson v-else class="text-[32px]" />
                         </NuxtLink>
                         <div
                             id="Animation"
@@ -84,5 +107,9 @@ const { currentUser } = storeToRefs(userStore);
 li:hover > #Animation {
     background-color: rgba(255, 255, 255, 0.06);
     transform: scale(1);
+}
+
+.currentRoute {
+    color: #fff;
 }
 </style>
