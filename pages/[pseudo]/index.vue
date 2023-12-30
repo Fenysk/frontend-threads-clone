@@ -19,10 +19,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <main class="container mx-auto">
+    <main>
         <ProfileCard v-if="profile" :profile="profile" />
     </main>
-
-    <pre>{{ profile }}</pre>
-    <pre>{{ threads }}</pre>
 </template>
