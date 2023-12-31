@@ -97,7 +97,12 @@ const hasStats = props.thread.Children?.length > 0 || props.thread.Likes?.length
 </script>
 
 <template>
-    <div id="Thread" class="flex flex-col gap-1 border-t-[1px] border-white/10 pt-3 pb-1">
+    <div
+        id="Thread"
+        class="flex flex-col pb-1"
+        :class="thread.parentId ? '' : 'border-t-[1px] border-white/10 pt-3'"
+    >
+        <!-- <Debug :data="mode" /> -->
         <div class="flex flex-row items-stretch gap-3">
             <aside class="flex flex-col justify-stretch pt-2">
                 <img
@@ -106,7 +111,14 @@ const hasStats = props.thread.Children?.length > 0 || props.thread.Likes?.length
                     class="w-8 h-8 object-cover rounded-full"
                 />
                 <div v-else class="w-8 h-8 bg-gray-500 rounded-full"></div>
-                <ThreadWire v-if="thread.Children?.length > 0" />
+                <ThreadWire
+                    v-if="thread.Children?.length > 0"
+                    :marginTop="true"
+                    :marginBottom="
+                        (mode !== 'feed' && thread.Children?.length === 0) ||
+                        (mode === 'feed' && thread.Children?.length > 0)
+                    "
+                />
             </aside>
 
             <div id="Content" class="w-full">
@@ -119,17 +131,29 @@ const hasStats = props.thread.Children?.length > 0 || props.thread.Likes?.length
                         <div id="Options"><IconsSuspension class="text-xl" /></div>
                     </div>
                 </header>
-                <span class="block font-light">{{ thread.content }}</span>
+                <NuxtLink
+                    :to="`${thread.User.Profile?.pseudo}/post/${thread.id}`"
+                    class="block font-light"
+                    >{{ thread.content }}</NuxtLink
+                >
                 <ThreadActions :thread="thread" />
             </div>
         </div>
 
         <footer class="flex flex-row items-stretch gap-3 h-4 mb-2" v-if="hasStats">
             <aside class="w-8">
-                <ThreadAvatars :participants v-if="thread.Children?.length > 0" />
+                <ThreadAvatars
+                    :participants
+                    v-if="mode === 'feed' && thread.Children?.length > 0"
+                />
+                <ThreadWire
+                    v-else-if="thread.Children?.length > 0"
+                    :marginTop="thread.Parent?.length === 0"
+                    :marginBottom="false"
+                />
             </aside>
 
-            <div class="w-full flex items-center text-white/50">
+            <div class="w-full flex items-center text-white/50 mt-1">
                 <ThreadStats
                     :subject="'comments'"
                     :data="thread.Children"
