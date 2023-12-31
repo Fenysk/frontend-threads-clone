@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
         const { refreshTokens } = useAuth();
         const isRefreshed = await refreshTokens(refreshToken.value);
 
-        if (isRefreshed)
+        if (!!isRefreshed)
             console.log('Redirect to : ', to.path);
             return true;
     }

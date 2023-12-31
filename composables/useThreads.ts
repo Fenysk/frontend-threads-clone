@@ -37,6 +37,22 @@ export const useThreads = () => {
         }
     }
 
+    const getThreadById = async (id: string) => {
+        try {
+            const response = await fetch(`${API_URL}/threads/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authStore.accessToken}`
+                },
+            })
+            const thread = await response.json();
+
+            return thread;
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
     const getMyFollowingFeed = async (page: number = 1) => {
         try {
             const response = await fetch(`${API_URL}/threads/feed/following/${page}`, {
@@ -57,7 +73,8 @@ export const useThreads = () => {
     return {
         getMyThreads,
         getThreadsByPseudo,
-        getMyFollowingFeed
+        getThreadById,
+        getMyFollowingFeed,
     }
 
 }
