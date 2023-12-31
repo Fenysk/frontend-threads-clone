@@ -5,11 +5,15 @@ definePageMeta({
 
 const { getMyFollowingFeed } = useThreads();
 
-const feed = await getMyFollowingFeed();
+const feed = ref<any[]>([]);
+
+onBeforeMount(async () => {
+    feed.value = await getMyFollowingFeed();
+});
 </script>
 
 <template>
     <main>
-        <Feed :feed="feed" v-if="feed.length > 0" :mode="'feed'" />
+        <Feed :feed="feed" v-if="feed" :mode="'feed'" />
     </main>
 </template>
