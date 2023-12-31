@@ -41,6 +41,7 @@ export const useAuth = () => {
         } catch (error) {
             const tokens = { accessToken: null, refreshToken: null }
             storeTokens(tokens);
+            alert(error.message);
         }
     }
 

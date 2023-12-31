@@ -10,6 +10,6 @@ const feed = await getMyFollowingFeed();
 
 <template>
     <main>
-        <Feed :feed="feed" />
+        <Feed :feed="feed" v-if="feed.length > 0" />
     </main>
 </template>

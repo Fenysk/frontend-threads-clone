@@ -21,6 +21,7 @@ onBeforeMount(async () => {
 <template>
     <main>
         <ProfileCard v-if="profile" :profile="profile" />
+        <Feed v-if="threads" :feed="threads" :mode="'profile'" />
         <Debug :data="threads" />
     </main>
 </template>

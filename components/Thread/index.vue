@@ -76,58 +76,73 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    mode: {
+        type: String,
+        required: true,
+    },
 });
 
 const { transformDateToTimeAgo } = useUtils();
-const timeAgo = transformDateToTimeAgo(new Date(props.thread.createdAt));
+const createdAgo = transformDateToTimeAgo(new Date(props.thread.createdAt));
+
+const participants = props.thread.Children?.map((thread) => thread.User).filter(
+    (user, index, self) => index === self.findIndex((u) => u.id === user.id)
+);
 
 const openModal = (modalName: string) => {
     alert(modalName);
 };
+
+const hasStats = props.thread.Children?.length > 0 || props.thread.Likes?.length > 0;
 </script>
 
 <template>
-    <div
-        id="Thread"
-        class="flex flex-row justify-between items-stretch gap-3 w-full pt-3 border-white/10"
-        :class="{
-            'border-t-[1px]': !thread.parentId,
-            'pb-3': thread.parentId,
-        }"
-    >
-        <div id="Participants" class="flex flex-col items-center justify-between">
-            <div id="Author" class="pt-1 block">
+    <div id="Thread" class="flex flex-col gap-1 border-t-[1px] border-white/10 pt-3 pb-1">
+        <div class="flex flex-row items-stretch gap-3">
+            <aside class="flex flex-col justify-stretch pt-2">
                 <img
-                    v-if="thread.User.Profile.avatarUrl"
-                    :src="thread.User.Profile.avatarUrl"
-                    alt="Author avatar"
-                    class="w-9 h-9 rounded-full object-cover"
+                    v-if="thread.User.Profile?.avatarUrl"
+                    :src="thread.User.Profile?.avatarUrl"
+                    class="w-8 h-8 object-cover rounded-full"
                 />
-                <div v-else class="w-9 h-9 rounded-full bg-gray-700"></div>
+                <div v-else class="w-8 h-8 bg-gray-500 rounded-full"></div>
+                <ThreadWire v-if="thread.Children?.length > 0" />
+            </aside>
+
+            <div id="Content" class="w-full">
+                <header class="flex flex-row justify-between">
+                    <span class="block">{{ thread.User.Profile?.pseudo }}</span>
+                    <div class="flex flex-row items-center gap-2">
+                        <span class="block font-light text-sm text-white/50">{{
+                            createdAgo
+                        }}</span>
+                        <div id="Options"><IconsSuspension class="text-xl" /></div>
+                    </div>
+                </header>
+                <span class="block font-light">{{ thread.content }}</span>
+                <ThreadActions :thread="thread" />
             </div>
-            <FeedThreadLine v-if="thread.Children?.length > 0" />
         </div>
 
-        <div id="Content" class="w-full flex flex-col">
-            <div id="Header" class="flex justify-between relative">
-                <span>{{ thread.User.Profile.pseudo }}</span>
-                <div
-                    class="flex flex-row flex-nowrap items-center absolute right-0 top-0"
-                >
-                    <span class="text-white/50 font-light text-sm block">{{
-                        timeAgo
-                    }}</span>
-                    <button
-                        @click="openModal('thread-options')"
-                        class="block p-2 rounded-full hover:bg-white/5 transition-all"
-                    >
-                        <IconsSuspension class="text-white text-xl" />
-                    </button>
-                </div>
+        <footer class="flex flex-row items-stretch gap-3 h-4 mb-2" v-if="hasStats">
+            <aside class="w-8">
+                <ThreadAvatars :participants v-if="thread.Children?.length > 0" />
+            </aside>
+
+            <div class="w-full flex items-center text-white/50">
+                <ThreadStats
+                    :subject="'comments'"
+                    :data="thread.Children"
+                    :separation="thread.Likes?.length > 0"
+                />
+                <ThreadStats
+                    :subject="'likes'"
+                    :data="thread.Likes"
+                    :separation="thread.Reposts?.length > 0"
+                />
             </div>
-            <span class="text-base font-light">{{ thread.content }}</span>
-            <FeedThreadActions :thread="thread" />
-            <FeedThreadLikes :likes="thread.Likes" v-if="thread.Likes?.length > 0" />
-        </div>
+        </footer>
     </div>
+
+    <!-- <Debug :data="thread" class="my-4" /> -->
 </template>

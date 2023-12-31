@@ -50,6 +50,7 @@ export const useThreads = () => {
             return threads;
         } catch (error) {
             console.log(error);
+            return [];
         }
     }
 
